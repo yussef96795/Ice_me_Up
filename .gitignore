@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# recording output
+/ref/
+showcase-preview.png
+lighthouse-report.json
+snapshot.txt
