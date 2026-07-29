@@ -55,12 +55,25 @@
   height: 100%;
   pointer-events: none;
   transform: translate3d(0, 101%, 0);
+}
+
+.marquee__inner-wrap {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.marquee__inner {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
+  width: 100%;
+  will-change: transform;
 }
 
-.marquee__static {
+.marquee__inner span {
+  white-space: nowrap;
   text-transform: uppercase;
   font-weight: 400;
   font-size: 4vh;

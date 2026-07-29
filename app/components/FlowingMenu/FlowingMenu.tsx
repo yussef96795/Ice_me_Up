@@ -6,7 +6,6 @@ import './FlowingMenu.css';
 interface FlowingMenuItem {
   link?: string;
   text: string;
-  marqueeText?: string;
   image?: string;
 }
 
@@ -22,14 +21,13 @@ interface FlowingMenuProps {
 }
 
 function FlowingMenu({
-  items,
-  speed = 15,
+  items = [],
   textColor = '#fff',
   bgColor = '#120F17',
   marqueeBgColor = '#fff',
   marqueeTextColor = '#120F17',
   borderColor = '#fff',
-  onItemClick
+  onItemClick,
 }: FlowingMenuProps) {
   return (
     <div className="menu-wrap" style={{ backgroundColor: bgColor }}>
@@ -38,7 +36,6 @@ function FlowingMenu({
           <MenuItem
             key={idx}
             {...item}
-            speed={speed}
             textColor={textColor}
             marqueeBgColor={marqueeBgColor}
             marqueeTextColor={marqueeTextColor}
@@ -54,9 +51,7 @@ function FlowingMenu({
 interface MenuItemProps {
   link?: string;
   text: string;
-  marqueeText?: string;
   image?: string;
-  speed: number;
   textColor: string;
   marqueeBgColor: string;
   marqueeTextColor: string;
@@ -64,9 +59,10 @@ interface MenuItemProps {
   onItemClick?: () => void;
 }
 
-function MenuItem({ link, text, marqueeText, image, speed, textColor, marqueeBgColor, marqueeTextColor, borderColor, onItemClick }: MenuItemProps) {
+function MenuItem({ link, text, textColor, marqueeBgColor, marqueeTextColor, borderColor, onItemClick }: MenuItemProps) {
   const itemRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
+  const marqueeInnerRef = useRef<HTMLDivElement>(null);
   const reducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const animationDefaults = { duration: 0.6, ease: 'expo' };
@@ -84,9 +80,10 @@ function MenuItem({ link, text, marqueeText, image, speed, textColor, marqueeBgC
   };
 
   const handleMouseEnter = (ev: React.MouseEvent) => {
-    if (!itemRef.current || !marqueeRef.current) return;
+    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
     if (reducedMotion) {
       gsap.set(marqueeRef.current, { y: '0%' });
+      gsap.set(marqueeInnerRef.current, { y: '0%' });
       return;
     }
     const rect = itemRef.current.getBoundingClientRect();
@@ -94,16 +91,18 @@ function MenuItem({ link, text, marqueeText, image, speed, textColor, marqueeBgC
     const y = ev.clientY - rect.top;
     const edge = findClosestEdge(x, y, rect.width, rect.height);
 
-    gsap.set(marqueeRef.current, { y: edge === 'top' ? '-101%' : '101%' });
     gsap
       .timeline({ defaults: animationDefaults })
-      .to(marqueeRef.current, { y: '0%' }, 0);
+      .set(marqueeRef.current, { y: edge === 'top' ? '-101%' : '101%' }, 0)
+      .set(marqueeInnerRef.current, { y: edge === 'top' ? '101%' : '-101%' }, 0)
+      .to([marqueeRef.current, marqueeInnerRef.current], { y: '0%' }, 0);
   };
 
   const handleMouseLeave = (ev: React.MouseEvent) => {
-    if (!itemRef.current || !marqueeRef.current) return;
+    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
     if (reducedMotion) {
       gsap.set(marqueeRef.current, { y: '-101%' });
+      gsap.set(marqueeInnerRef.current, { y: '101%' });
       return;
     }
     const rect = itemRef.current.getBoundingClientRect();
@@ -113,7 +112,8 @@ function MenuItem({ link, text, marqueeText, image, speed, textColor, marqueeBgC
 
     gsap
       .timeline({ defaults: animationDefaults })
-      .to(marqueeRef.current, { y: edge === 'top' ? '-101%' : '101%' }, 0);
+      .to(marqueeRef.current, { y: edge === 'top' ? '-101%' : '101%' }, 0)
+      .to(marqueeInnerRef.current, { y: edge === 'top' ? '101%' : '-101%' }, 0);
   };
 
   return (
@@ -132,8 +132,10 @@ function MenuItem({ link, text, marqueeText, image, speed, textColor, marqueeBgC
         {text}
       </a>
       <div className="marquee" ref={marqueeRef} style={{ backgroundColor: marqueeBgColor }}>
-        <div className="marquee__static" style={{ color: marqueeTextColor }}>
-          {marqueeText || text}
+        <div className="marquee__inner-wrap" aria-hidden="true">
+          <div className="marquee__inner" ref={marqueeInnerRef}>
+            <span style={{ color: marqueeTextColor }}>{text}</span>
+          </div>
         </div>
       </div>
     </div>

@@ -48,35 +48,43 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
     const heroCopy = document.querySelector<HTMLElement>('[data-hero-copy]');
     if (!interiorCopy || !interiorCopy2 || !interiorCopy3) return;
 
+    const applyFrame = (frame: number) => {
+      const fadeIn = lerp(frame, INTERIOR_FADE_START, INTERIOR_FADE_END, 0, 1);
+      const fadeOut = lerp(frame, INTERIOR_FADE_END, INTERIOR_DISAPPEAR, 1, 0);
+      const interiorOpacity = Math.min(fadeIn, fadeOut);
+      interiorCopy.style.opacity = String(interiorOpacity);
+      interiorCopy.style.pointerEvents = interiorOpacity > 0.1 ? 'auto' : 'none';
+
+      const fadeIn2 = lerp(frame, INTERIOR2_FADE_START, INTERIOR2_FADE_END, 0, 1);
+      const fadeOut2 = lerp(frame, INTERIOR2_FADE_END, INTERIOR2_DISAPPEAR, 1, 0);
+      const interior2Opacity = Math.min(fadeIn2, fadeOut2);
+      interiorCopy2.style.opacity = String(interior2Opacity);
+      interiorCopy2.style.pointerEvents = interior2Opacity > 0.1 ? 'auto' : 'none';
+
+      const interior3Opacity = lerp(frame, INTERIOR3_FADE_START, INTERIOR3_FADE_END, 0, 1);
+      interiorCopy3.style.opacity = String(interior3Opacity);
+      interiorCopy3.style.pointerEvents = interior3Opacity > 0.1 ? 'auto' : 'none';
+
+      if (heroCopy) {
+        const anyInteriorActive = interiorOpacity > 0.1 || interior2Opacity > 0.1 || interior3Opacity > 0.1;
+        heroCopy.style.pointerEvents = anyInteriorActive ? 'none' : 'auto';
+      }
+    };
+
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const initProgress = total > 0 ? window.scrollY / total : 0;
+    applyFrame(Math.floor(initProgress * TOTAL_FRAMES));
+
     const st = ScrollTrigger.create({
       trigger: document.body,
       start: 'top top',
       end: 'bottom bottom',
       onUpdate: (self) => {
-        const frame = Math.floor(self.progress * TOTAL_FRAMES);
-
-        const fadeIn = lerp(frame, INTERIOR_FADE_START, INTERIOR_FADE_END, 0, 1);
-        const fadeOut = lerp(frame, INTERIOR_FADE_END, INTERIOR_DISAPPEAR, 1, 0);
-        const interiorOpacity = Math.min(fadeIn, fadeOut);
-        interiorCopy.style.opacity = String(interiorOpacity);
-        interiorCopy.style.pointerEvents = interiorOpacity > 0.1 ? 'auto' : 'none';
-
-        const fadeIn2 = lerp(frame, INTERIOR2_FADE_START, INTERIOR2_FADE_END, 0, 1);
-        const fadeOut2 = lerp(frame, INTERIOR2_FADE_END, INTERIOR2_DISAPPEAR, 1, 0);
-        const interior2Opacity = Math.min(fadeIn2, fadeOut2);
-        interiorCopy2.style.opacity = String(interior2Opacity);
-        interiorCopy2.style.pointerEvents = interior2Opacity > 0.1 ? 'auto' : 'none';
-
-        const interior3Opacity = lerp(frame, INTERIOR3_FADE_START, INTERIOR3_FADE_END, 0, 1);
-        interiorCopy3.style.opacity = String(interior3Opacity);
-        interiorCopy3.style.pointerEvents = interior3Opacity > 0.1 ? 'auto' : 'none';
-
-        if (heroCopy) {
-          const anyInteriorActive = interiorOpacity > 0.1 || interior2Opacity > 0.1 || interior3Opacity > 0.1;
-          heroCopy.style.pointerEvents = anyInteriorActive ? 'none' : 'auto';
-        }
+        applyFrame(Math.floor(self.progress * TOTAL_FRAMES));
       },
     });
+
+    ScrollTrigger.refresh();
 
     return () => {
       st.kill();

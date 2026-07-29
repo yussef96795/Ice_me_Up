@@ -104,6 +104,24 @@ export default function FrameSequence() {
         // Unlock scroll after critical frames are loaded
         scrollReady = true;
 
+        // Sync to restored scroll position immediately
+        const total = document.documentElement.scrollHeight - H;
+        if (total > 0 && window.scrollY > 0) {
+          const idx = Math.min(
+            Math.floor((window.scrollY / total) * TOTAL_FRAMES),
+            TOTAL_FRAMES - 1
+          );
+          if (idx > 0 && idx !== currentFrame) {
+            if (!images[idx]?.complete) {
+              try { images[idx] = await loadImage(getPath(idx + 1)); } catch {}
+            }
+            if (images[idx]?.complete) {
+              currentFrame = idx;
+              draw(idx);
+            }
+          }
+        }
+
         // Phase 3 — load remaining frames during idle time
         const loadRest = async () => {
           for (let i = CRITICAL_BATCH; i < TOTAL_FRAMES; i++) {
