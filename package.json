@@ -2,12 +2,15 @@
   "name": "ice-me-up",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://yussef96795.github.io/Ice_me_Up",
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "analyze": "ANALYZE=true next build"
+    "analyze": "ANALYZE=true next build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d out"
   },
   "dependencies": {
     "gsap": "^3.15.0",
@@ -26,6 +29,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.11",
+    "gh-pages": "^6.3.0",
     "puppeteer": "^25.3.0",
     "tailwindcss": "^4",
     "typescript": "^5"
