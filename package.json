@@ -10,7 +10,7 @@
     "lint": "eslint",
     "analyze": "ANALYZE=true next build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d out"
+    "deploy": "node deploy.js"
   },
   "dependencies": {
     "gsap": "^3.15.0",
