@@ -99,7 +99,12 @@ const OptionWheel = ({
     activeColor,
   };
 
+  const reducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   const runFrame = useCallback((now: number) => {
+    if (reducedMotion) {
+      posRef.current = targetRef.current;
+    }
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
     const cfg = cfgRef.current as {

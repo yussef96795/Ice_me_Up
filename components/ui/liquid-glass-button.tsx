@@ -40,13 +40,13 @@ export const LiquidGlassButton = ({
           0 0 12px rgba(0, 0, 0, 0.08),
           0 0 24px rgba(255, 255, 255, 0.1)
         `,
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        transition: 'filter 0.2s ease, box-shadow 0.2s ease',
         cursor: 'pointer',
         ...style,
       }}
       onMouseEnter={(e) => {
         const el = e.currentTarget;
-        el.style.transform = 'scale(1.03)';
+        el.style.filter = 'brightness(1.12)';
         el.style.boxShadow = `
           inset 2px 2px 2px 0 rgba(255, 255, 255, 0.4),
           inset -2px -2px 2px 0 rgba(255, 255, 255, 0.4),
@@ -57,7 +57,7 @@ export const LiquidGlassButton = ({
       }}
       onMouseLeave={(e) => {
         const el = e.currentTarget;
-        el.style.transform = 'scale(1)';
+        el.style.filter = 'none';
         el.style.boxShadow = `
           inset 2px 2px 2px 0 rgba(255, 255, 255, 0.35),
           inset -2px -2px 2px 0 rgba(255, 255, 255, 0.35),
@@ -67,10 +67,10 @@ export const LiquidGlassButton = ({
         `;
       }}
       onMouseDown={(e) => {
-        e.currentTarget.style.transform = 'scale(0.97)';
+        e.currentTarget.style.filter = 'brightness(0.92)';
       }}
       onMouseUp={(e) => {
-        e.currentTarget.style.transform = 'scale(1.03)';
+        e.currentTarget.style.filter = 'brightness(1.12)';
       }}
       {...(as === 'a' ? { href } : {})}
       onClick={onClick}

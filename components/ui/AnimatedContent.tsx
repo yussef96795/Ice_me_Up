@@ -45,6 +45,11 @@ const AnimatedContent = ({
     const el = wrapperRef.current;
     if (!el) return;
 
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.set(el, { opacity: 1, x: 0, y: 0, scale: 1 });
+      return;
+    }
+
     const axis = direction === 'horizontal' ? 'x' : 'y';
     const offset = reverse ? distance : -distance;
 

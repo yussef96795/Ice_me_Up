@@ -5,20 +5,26 @@ import { DM_Serif_Display, DM_Sans } from 'next/font/google';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrollReveal from './ScrollReveal';
-import FadeContent from './FadeContent';
+
 import { LiquidGlassButton } from '@/components/ui/liquid-glass-button';
 import { lerp } from './lerp';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TOTAL_FRAMES = 476;
-const INTERIOR_FADE_START = 300;
-const INTERIOR_FADE_END = 380;
+const TOTAL_FRAMES = 1440;
+const INTERIOR_FADE_START = 396;
+const INTERIOR_FADE_END = 476;
+const INTERIOR_DISAPPEAR = 500;
+const INTERIOR2_FADE_START = 916;
+const INTERIOR2_FADE_END = 996;
+const INTERIOR2_DISAPPEAR = 1020;
+const INTERIOR3_FADE_START = 1360;
+const INTERIOR3_FADE_END = 1440;
 
 const dmSerif = DM_Serif_Display({
   weight: '400',
   subsets: ['latin'],
-  variable: '--font-dm-serif',
+  variable: '--font-display',
 });
 
 const dmSans = DM_Sans({
@@ -27,10 +33,13 @@ const dmSans = DM_Sans({
   variable: '--font-dm-sans',
 });
 
-export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMenu?: () => void; onOpenLocations?: () => void }) {
+export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato, onOpenDrinks }: { onOpenMenu?: () => void; onOpenLocations?: () => void; onOpenGelato?: () => void; onOpenDrinks?: () => void }) {
   useEffect(() => {
     const interiorCopy = document.querySelector<HTMLElement>('[data-interior-copy]');
-    if (!interiorCopy) return;
+    const interiorCopy2 = document.querySelector<HTMLElement>('[data-interior-copy-2]');
+    const interiorCopy3 = document.querySelector<HTMLElement>('[data-interior-copy-3]');
+    const heroCopy = document.querySelector<HTMLElement>('[data-hero-copy]');
+    if (!interiorCopy || !interiorCopy2 || !interiorCopy3) return;
 
     const st = ScrollTrigger.create({
       trigger: document.body,
@@ -39,9 +48,26 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
       onUpdate: (self) => {
         const frame = Math.floor(self.progress * TOTAL_FRAMES);
 
-        const interiorOpacity = lerp(frame, INTERIOR_FADE_START, INTERIOR_FADE_END, 0, 1);
+        const fadeIn = lerp(frame, INTERIOR_FADE_START, INTERIOR_FADE_END, 0, 1);
+        const fadeOut = lerp(frame, INTERIOR_FADE_END, INTERIOR_DISAPPEAR, 1, 0);
+        const interiorOpacity = Math.min(fadeIn, fadeOut);
         interiorCopy.style.opacity = String(interiorOpacity);
         interiorCopy.style.pointerEvents = interiorOpacity > 0.1 ? 'auto' : 'none';
+
+        const fadeIn2 = lerp(frame, INTERIOR2_FADE_START, INTERIOR2_FADE_END, 0, 1);
+        const fadeOut2 = lerp(frame, INTERIOR2_FADE_END, INTERIOR2_DISAPPEAR, 1, 0);
+        const interior2Opacity = Math.min(fadeIn2, fadeOut2);
+        interiorCopy2.style.opacity = String(interior2Opacity);
+        interiorCopy2.style.pointerEvents = interior2Opacity > 0.1 ? 'auto' : 'none';
+
+        const interior3Opacity = lerp(frame, INTERIOR3_FADE_START, INTERIOR3_FADE_END, 0, 1);
+        interiorCopy3.style.opacity = String(interior3Opacity);
+        interiorCopy3.style.pointerEvents = interior3Opacity > 0.1 ? 'auto' : 'none';
+
+        if (heroCopy) {
+          const anyInteriorActive = interiorOpacity > 0.1 || interior2Opacity > 0.1 || interior3Opacity > 0.1;
+          heroCopy.style.pointerEvents = anyInteriorActive ? 'none' : 'auto';
+        }
       },
     });
 
@@ -68,8 +94,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
           left: 0,
           right: 0,
           height: 160,
-          background:
-            'linear-gradient(to bottom, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0) 100%)',
+          background: 'var(--gradient-vignette)',
           zIndex: 2,
           pointerEvents: 'none',
         }}
@@ -80,8 +105,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
         style={{
           position: 'absolute',
           inset: 0,
-          background:
-            'linear-gradient(to right, rgba(0,0,0,0.48) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0) 75%)',
+          background: 'var(--gradient-scrim)',
           zIndex: 1,
           pointerEvents: 'none',
         }}
@@ -105,10 +129,10 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
       >
         <span
           style={{
-            fontFamily: 'var(--font-dm-serif)',
+            fontFamily: 'var(--font-display)',
             fontSize: 22,
             fontWeight: 400,
-            color: '#ffffff',
+            color: 'var(--color-text-primary)',
             letterSpacing: '-0.3px',
             lineHeight: 1,
           }}
@@ -129,7 +153,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
             className="hero-nav-link"
             tintColor="rgba(255, 255, 255, 0.08)"
             style={{
-              fontFamily: 'var(--font-dm-sans)',
+              fontFamily: 'var(--font-body)',
               fontSize: 14,
               fontWeight: 500,
               color: '#ffffff',
@@ -147,7 +171,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
             className="hero-nav-link"
             tintColor="rgba(255, 255, 255, 0.08)"
             style={{
-              fontFamily: 'var(--font-dm-sans)',
+              fontFamily: 'var(--font-body)',
               fontSize: 14,
               fontWeight: 500,
               color: '#ffffff',
@@ -164,7 +188,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
             tintColor="rgba(255, 255, 255, 0.08)"
             onClick={onOpenLocations}
             style={{
-              fontFamily: 'var(--font-dm-sans)',
+              fontFamily: 'var(--font-body)',
               fontSize: 14,
               fontWeight: 500,
               color: '#ffffff',
@@ -180,7 +204,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
             className="hero-order-btn"
             tintColor="rgba(255, 255, 255, 0.2)"
             style={{
-              fontFamily: 'var(--font-dm-sans)',
+              fontFamily: 'var(--font-body)',
               fontSize: 14,
               fontWeight: 600,
               color: '#1a1a1a',
@@ -267,22 +291,22 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
           Fresh flavors, real ingredients, and a little bit of joy in every cup. Come find your new favorite.
         </ScrollReveal>
 
-        <FadeContent
+        <ScrollReveal
           reverse
-          blur
           scrollDistance={500}
-          initialOpacity={0}
-          className="hero-cta-wrapper"
+          splitWords={false}
+          enableBlur
+          containerClassName="hero-cta-wrapper"
         >
           <LiquidGlassButton
             tintColor="rgba(124, 191, 138, 0.25)"
             className="hero-cta-btn"
             onClick={onOpenLocations}
             style={{
-              fontFamily: 'var(--font-dm-sans)',
+              fontFamily: 'var(--font-body)',
               fontSize: 15,
               fontWeight: 600,
-              color: '#ffffff',
+              color: 'var(--color-text-primary)',
               borderRadius: 100,
               padding: '14px 32px',
               letterSpacing: 0.2,
@@ -291,7 +315,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
           >
             Find a Location
           </LiquidGlassButton>
-        </FadeContent>
+        </ScrollReveal>
       </div>
 
       {/* ─── Interior Copy ─── */}
@@ -313,8 +337,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
             left: 0,
             right: 0,
             height: '45%',
-            background:
-              'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0) 100%)',
+            background: 'var(--gradient-bottom)',
             pointerEvents: 'none',
           }}
         />
@@ -327,12 +350,11 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
             bottom: 80,
             left: 80,
             maxWidth: 600,
-            pointerEvents: 'auto',
           }}
         >
           <p
             style={{
-              fontFamily: 'var(--font-dm-sans)',
+              fontFamily: 'var(--font-body)',
               fontSize: 'clamp(26px, 3vw, 36px)',
               fontWeight: 400,
               color: '#ffffff',
@@ -346,10 +368,10 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
           <LiquidGlassButton
             as="button"
             tintColor="rgba(180, 160, 220, 0.25)"
-            onClick={onOpenMenu}
+            onClick={onOpenGelato}
             style={{
               display: 'inline-block',
-              fontFamily: 'var(--font-dm-sans)',
+              fontFamily: 'var(--font-body)',
               fontSize: 16,
               fontWeight: 600,
               color: '#ffffff',
@@ -361,21 +383,145 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
               cursor: 'pointer',
             }}
           >
-            VIEW OUR MENU
+            VIEW OUR GELATO
           </LiquidGlassButton>
 
+        </div>
+      </div>
+
+      {/* ─── Interior Copy 2 (frame 996) ─── */}
+      <div
+        data-interior-copy-2
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 10,
+          pointerEvents: 'none',
+          opacity: 0,
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '45%',
+            background: 'var(--gradient-bottom)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          className="interior-copy-content"
+          style={{
+            position: 'absolute',
+            bottom: 80,
+            left: 80,
+            maxWidth: 600,
+          }}
+        >
           <p
             style={{
-              fontFamily: 'var(--font-dm-sans)',
-              fontSize: 15,
+              fontFamily: 'var(--font-body)',
+              fontSize: 'clamp(26px, 3vw, 36px)',
               fontWeight: 400,
-              color: 'rgba(255, 255, 255, 0.65)',
-              letterSpacing: 0.5,
-              lineHeight: 1,
+              color: '#ffffff',
+              lineHeight: 1.4,
+              marginBottom: 28,
             }}
           >
-            16 flavours · daily rotation
+            Patisserie born from old recipes, baked slowly and with intention, one slice at a time.
           </p>
+
+          <LiquidGlassButton
+            as="button"
+            tintColor="rgba(255, 247, 0, 0.25)"
+            onClick={onOpenMenu}
+            style={{
+              display: 'inline-block',
+              fontFamily: 'var(--font-body)',
+              fontSize: 16,
+              fontWeight: 600,
+              color: '#ffffff',
+              letterSpacing: 3,
+              textTransform: 'uppercase' as const,
+              padding: '20px 56px',
+              borderRadius: 100,
+              marginBottom: 20,
+              cursor: 'pointer',
+            }}
+          >
+            VIEW OUR PASTRY
+          </LiquidGlassButton>
+
+        </div>
+      </div>
+
+      {/* ─── Interior Copy 3 (frame 1440) ─── */}
+      <div
+        data-interior-copy-3
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 10,
+          pointerEvents: 'none',
+          opacity: 0,
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '45%',
+            background: 'var(--gradient-bottom)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          className="interior-copy-content"
+          style={{
+            position: 'absolute',
+            bottom: 80,
+            left: 80,
+            maxWidth: 600,
+          }}
+        >
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'clamp(26px, 3vw, 36px)',
+              fontWeight: 400,
+              color: '#ffffff',
+              lineHeight: 1.4,
+              marginBottom: 28,
+            }}
+          >
+            Fresh, seasonal, and made to order — because the best drinks don't come from a bottle.
+          </p>
+
+          <LiquidGlassButton
+            as="button"
+            tintColor="rgba(255, 182, 193, 0.25)"
+            onClick={onOpenDrinks}
+            style={{
+              display: 'inline-block',
+              fontFamily: 'var(--font-body)',
+              fontSize: 16,
+              fontWeight: 600,
+              color: '#ffffff',
+              letterSpacing: 3,
+              textTransform: 'uppercase' as const,
+              padding: '20px 56px',
+              borderRadius: 100,
+              marginBottom: 20,
+              cursor: 'pointer',
+            }}
+          >
+            VIEW OUR DRINKS
+          </LiquidGlassButton>
+
         </div>
       </div>
 
@@ -384,13 +530,13 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
           margin: 0 0 16px 0;
         }
         .hero-eyebrow-text {
-          font-family: var(--font-dm-sans);
+          font-family: var(--font-body);
           font-size: 13px;
           font-weight: 500;
-          color: rgba(255, 255, 255, 0.7);
+          color: var(--color-text-dim);
           letter-spacing: 2px;
           text-transform: uppercase;
-          text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+          text-shadow: var(--shadow-text);
           line-height: 1;
         }
 
@@ -401,14 +547,14 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
           margin: 0;
         }
         .hero-headline-word {
-          font-family: var(--font-dm-serif);
+          font-family: var(--font-display);
           font-size: clamp(36px, 4vw, 64px);
           font-weight: 400;
-          color: #ffffff;
+          color: var(--color-text-primary);
           line-height: 1.08;
           letter-spacing: -1px;
           white-space: nowrap;
-          text-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.3);
+          text-shadow: var(--shadow-text-strong);
         }
         .hero-headline-italic .hero-headline-word {
           font-style: italic;
@@ -418,13 +564,13 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations }: { onOpenMen
           margin: 0 0 36px 0;
         }
         .hero-subheading-text {
-          font-family: var(--font-dm-sans);
+          font-family: var(--font-body);
           font-size: 18px;
           font-weight: 400;
-          color: rgba(255, 255, 255, 0.75);
+          color: var(--color-text-secondary);
           line-height: 1.55;
           max-width: 400px;
-          text-shadow: 0 1px 3px rgba(0,0,0,0.35);
+          text-shadow: var(--shadow-text);
         }
 
         .hero-cta-wrapper {

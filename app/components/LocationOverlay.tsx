@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { DM_Serif_Display, DM_Sans } from 'next/font/google';
+import { GlassCloseButton } from '@/components/ui/glass-close-button';
 import AnimatedContent from '@/components/ui/AnimatedContent';
 import OptionWheel from '@/components/ui/OptionWheel';
 import { LiquidGlassButton } from '@/components/ui/liquid-glass-button';
@@ -9,7 +10,7 @@ import { LiquidGlassButton } from '@/components/ui/liquid-glass-button';
 const dmSerif = DM_Serif_Display({
   weight: '400',
   subsets: ['latin'],
-  variable: '--font-dm-serif',
+  variable: '--font-display',
 });
 
 const dmSans = DM_Sans({
@@ -92,37 +93,13 @@ export default function LocationOverlay({ isOpen, onClose }: LocationOverlayProp
       />
 
       {/* Close button */}
-      <button
-        onClick={onClose}
-        className="location-close-btn"
-        style={{
-          position: 'absolute',
-          top: 32,
-          right: 40,
-          background: 'rgba(255, 255, 255, 0.15)',
-          border: '1px solid rgba(255, 255, 255, 0.3)',
-          borderRadius: '50%',
-          width: 52,
-          height: 52,
-          cursor: 'pointer',
-          color: '#fff',
-          fontSize: 20,
-          fontWeight: 300,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1001,
-          transition: 'background 0.2s ease',
-        }}
-      >
-        ×
-      </button>
+      <GlassCloseButton onClick={onClose} variant="close" />
 
       {/* Title */}
       <div style={{ position: 'absolute', top: 45, left: 0, right: 0, textAlign: 'center', zIndex: 10 }}>
         <span
           style={{
-            fontFamily: 'var(--font-dm-serif)',
+            fontFamily: 'var(--font-display)',
             fontStyle: 'italic',
             fontSize: 40,
             color: '#ffffff',
@@ -187,9 +164,6 @@ export default function LocationOverlay({ isOpen, onClose }: LocationOverlayProp
           to { opacity: 1; transform: scale(1); }
         }
 
-        .location-close-btn:hover {
-          background: rgba(255, 255, 255, 0.25) !important;
-        }
       `}</style>
     </div>
   );

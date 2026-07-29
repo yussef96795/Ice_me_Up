@@ -40,6 +40,9 @@ function MarqueeStrip({
   }, [text, image]);
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
     const setup = () => {
       if (!innerRef.current) return;
       const part = innerRef.current.querySelector('.marquee-strip__part');

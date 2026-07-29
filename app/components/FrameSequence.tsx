@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-const TOTAL_FRAMES = 476;
+const TOTAL_FRAMES = 1440;
 const CRITICAL_BATCH = 30;
 const WINDOW = 15;
 const LOOKAHEAD = 5;
