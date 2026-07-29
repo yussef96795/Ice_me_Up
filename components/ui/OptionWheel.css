@@ -48,34 +48,3 @@
   font-weight: 500;
   color: var(--ow-selected-text, inherit);
 }
-
-.option-wheel__item--selected::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 100vw;
-  transform: translateX(-50%);
-  background: var(--ow-selected-bg, transparent);
-  border-radius: 8px;
-  z-index: -1;
-}
-
-.option-wheel__item-text {
-  display: inline-block;
-  position: relative;
-  z-index: 2;
-}
-
-.option-wheel__item-marquee {
-  position: absolute;
-  top: 0;
-  left: -50vw;
-  right: -50vw;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  z-index: 2;
-  overflow: hidden;
-}

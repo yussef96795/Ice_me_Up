@@ -34,6 +34,13 @@ const dmSans = DM_Sans({
 });
 
 export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato, onOpenDrinks }: { onOpenMenu?: () => void; onOpenLocations?: () => void; onOpenGelato?: () => void; onOpenDrinks?: () => void }) {
+  const scrollToFrame = (frame: number) => {
+    const totalScroll = TOTAL_FRAMES * 12;
+    const vh = window.innerHeight;
+    const target = (frame / TOTAL_FRAMES) * (totalScroll - vh);
+    window.scrollTo({ top: target, behavior: 'smooth' });
+  };
+
   useEffect(() => {
     const interiorCopy = document.querySelector<HTMLElement>('[data-interior-copy]');
     const interiorCopy2 = document.querySelector<HTMLElement>('[data-interior-copy-2]');
@@ -148,10 +155,9 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
           }}
         >
           <LiquidGlassButton
-            as="a"
-            href="#menu"
             className="hero-nav-link"
             tintColor="rgba(255, 255, 255, 0.08)"
+            onClick={() => scrollToFrame(476)}
             style={{
               fontFamily: 'var(--font-body)',
               fontSize: 14,
@@ -163,30 +169,12 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
               borderRadius: 100,
             }}
           >
-            Menu
-          </LiquidGlassButton>
-          <LiquidGlassButton
-            as="a"
-            href="#about"
-            className="hero-nav-link"
-            tintColor="rgba(255, 255, 255, 0.08)"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 14,
-              fontWeight: 500,
-              color: '#ffffff',
-              textDecoration: 'none',
-              lineHeight: 1,
-              padding: '8px 16px',
-              borderRadius: 100,
-            }}
-          >
-            About
+            Gelato
           </LiquidGlassButton>
           <LiquidGlassButton
             className="hero-nav-link"
             tintColor="rgba(255, 255, 255, 0.08)"
-            onClick={onOpenLocations}
+            onClick={() => scrollToFrame(996)}
             style={{
               fontFamily: 'var(--font-body)',
               fontSize: 14,
@@ -198,11 +186,29 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
               borderRadius: 100,
             }}
           >
-            Locations
+            Pastry
+          </LiquidGlassButton>
+          <LiquidGlassButton
+            className="hero-nav-link"
+            tintColor="rgba(255, 255, 255, 0.08)"
+            onClick={() => scrollToFrame(1440)}
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 14,
+              fontWeight: 500,
+              color: '#ffffff',
+              textDecoration: 'none',
+              lineHeight: 1,
+              padding: '8px 16px',
+              borderRadius: 100,
+            }}
+          >
+            Drinks
           </LiquidGlassButton>
           <LiquidGlassButton
             className="hero-order-btn"
             tintColor="rgba(255, 255, 255, 0.2)"
+            onClick={onOpenLocations}
             style={{
               fontFamily: 'var(--font-body)',
               fontSize: 14,
@@ -213,7 +219,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
               lineHeight: 1,
             }}
           >
-            Order Now
+            Locations
           </LiquidGlassButton>
         </div>
       </nav>
@@ -354,7 +360,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
         >
           <p
             style={{
-              fontFamily: 'var(--font-body)',
+              fontFamily: 'var(--font-display)',
               fontSize: 'clamp(26px, 3vw, 36px)',
               fontWeight: 400,
               color: '#ffffff',
@@ -422,7 +428,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
         >
           <p
             style={{
-              fontFamily: 'var(--font-body)',
+              fontFamily: 'var(--font-display)',
               fontSize: 'clamp(26px, 3vw, 36px)',
               fontWeight: 400,
               color: '#ffffff',
@@ -490,7 +496,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
         >
           <p
             style={{
-              fontFamily: 'var(--font-body)',
+              fontFamily: 'var(--font-display)',
               fontSize: 'clamp(26px, 3vw, 36px)',
               fontWeight: 400,
               color: '#ffffff',

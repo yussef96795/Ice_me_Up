@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useState, useCallback, useEffect } from 'react';
-import MarqueeStrip from './MarqueeStrip';
 import './OptionWheel.css';
 
 interface OptionWheelProps {
@@ -22,13 +21,11 @@ interface OptionWheelProps {
   inset?: number;
   loop?: boolean;
   draggable?: boolean;
-  marqueeImage?: string;
-  marqueeSpeed?: number;
   soundUrl?: string;
   soundVolume?: number;
-  selectedBgColor?: string;
   selectedTextColor?: string;
   className?: string;
+  itemLinks?: string[];
 }
 
 const OptionWheel = ({
@@ -49,13 +46,11 @@ const OptionWheel = ({
   inset = 80,
   loop = false,
   draggable = true,
-  marqueeImage = '',
-  marqueeSpeed = 15,
   soundUrl = '',
   soundVolume = 0.5,
-  selectedBgColor = '',
   selectedTextColor = '',
   className = '',
+  itemLinks = [],
 }: OptionWheelProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -99,12 +94,7 @@ const OptionWheel = ({
     activeColor,
   };
 
-  const reducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   const runFrame = useCallback((now: number) => {
-    if (reducedMotion) {
-      posRef.current = targetRef.current;
-    }
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
     const cfg = cfgRef.current as {
@@ -156,10 +146,9 @@ const OptionWheel = ({
         rot = (mirror * ang * 180) / Math.PI;
       }
       const xPrefix = cfg.side === 'center' ? '-50% + ' : '';
-      const scale = 1 + Math.max(0, 1 - dist) * 0.18;
       const p = Math.max(0, 1 - Math.min(dist, 1));
       el.style.setProperty('--ow-p', p.toFixed(4));
-      el.style.transform = `translate(calc(${xPrefix}${x.toFixed(2)}px), calc(${y.toFixed(2)}px - 50%)) rotate(${rot.toFixed(3)}deg) scale(${scale.toFixed(3)})`;
+      el.style.transform = `translate(calc(${xPrefix}${x.toFixed(2)}px), calc(${y.toFixed(2)}px - 50%)) rotate(${rot.toFixed(3)}deg)`;
       el.style.opacity = String(Math.max(cfg.minOpacity, 1 - dist * cfg.fade));
       el.style.filter = cfg.blur > 0 ? `blur(${(dist * cfg.blur).toFixed(2)}px)` : 'none';
     }
@@ -272,8 +261,9 @@ const OptionWheel = ({
         else if (d < -cfg.count / 2) d += cfg.count;
       }
       applyTarget(cur + d, true);
+      if (itemLinks[index]) window.open(itemLinks[index], '_blank');
     },
-    [applyTarget]
+    [applyTarget, itemLinks]
   );
 
   const handleKeyDown = useCallback(
@@ -315,8 +305,7 @@ const OptionWheel = ({
         '--ow-active-color': activeColor,
         '--ow-font-size': `${fontSize}rem`,
         '--ow-inset': `${inset}px`,
-        '--ow-selected-bg': selectedBgColor || 'transparent',
-        '--ow-selected-text': selectedTextColor || 'inherit',
+        '--ow-selected-text': selectedTextColor || activeColor,
       } as React.CSSProperties}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -333,19 +322,7 @@ const OptionWheel = ({
           className={`option-wheel__item${selectedIndex === index ? ' option-wheel__item--selected' : ''}`}
           onClick={() => handleItemClick(index)}
         >
-          <span className="option-wheel__item-text" style={selectedIndex === index && marqueeImage ? { opacity: 0 } : undefined}>{label}</span>
-          {selectedIndex === index && marqueeImage && (
-            <div className="option-wheel__item-marquee">
-              <MarqueeStrip
-                text={label}
-                image={marqueeImage}
-                speed={marqueeSpeed}
-                textColor={selectedTextColor || textColor}
-                bgColor="transparent"
-                textSize={fontSize}
-              />
-            </div>
-          )}
+          {label}
         </div>
       ))}
     </div>

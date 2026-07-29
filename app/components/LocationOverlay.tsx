@@ -20,11 +20,11 @@ const dmSans = DM_Sans({
 });
 
 const locations = [
-  { name: 'Bardo', image: '/places/bardo.png' },
-  { name: 'Jardins de Carthage', image: '/places/jardins-de-carthage.png' },
-  { name: 'Marsa', image: '/places/marsa.png' },
-  { name: 'Menzah 5', image: '/places/menzah-5.png' },
-  { name: 'Mourouj 6', image: '/places/mourouj-6.png' },
+  { name: 'Bardo', image: '/places/bardo.png', mapUrl: 'https://www.google.com/maps/place/Ice+me+up+Le+Bardo/data=!4m2!3m1!1s0x0:0x249abc6f6bd3f60d?sa=X&ved=1t:2428&ictx=111' },
+  { name: 'Jardins de Carthage', image: '/places/jardins-de-carthage.png', mapUrl: 'https://www.google.com/maps/place/Ice+me+Up+les+Jardins+de+Carthage/data=!4m2!3m1!1s0x0:0x3c56a68f85f635f5?sa=X&ved=1t:2428&ictx=111' },
+  { name: 'Marsa', image: '/places/marsa.png', mapUrl: 'https://www.google.com/maps/place/Ice+me+up+la+Marsa/data=!4m2!3m1!1s0x0:0xcb974b7f04f5b147?sa=X&ved=1t:2428&ictx=111' },
+  { name: 'Menzah 5', image: '/places/menzah-5.png', mapUrl: 'https://www.google.com/maps/place/Ice+me+up+El+Menzah+5/data=!4m2!3m1!1s0x0:0x770fc0fcd7507ac8?sa=X&ved=1t:2428&ictx=111' },
+  { name: 'Mourouj 6', image: '/places/mourouj-6.png', mapUrl: 'https://www.google.com/maps/place/Ice+me+up+El+Mourouj+6/data=!4m2!3m1!1s0x0:0xa6e3238a79f38373?sa=X&ved=1t:2428&ictx=111' },
 ];
 
 interface LocationOverlayProps {
@@ -149,10 +149,7 @@ export default function LocationOverlay({ isOpen, onClose }: LocationOverlayProp
               inset={0}
               loop={false}
               draggable
-              marqueeImage={selected.image}
-              marqueeSpeed={25}
-              selectedBgColor="#ffffff"
-              selectedTextColor="#000000"
+              itemLinks={locations.map(l => l.mapUrl)}
             />
           </div>
         </AnimatedContent>
