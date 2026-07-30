@@ -176,7 +176,7 @@ export default function PastryMenu({ isOpen, onClose }: PastryMenuProps) {
 
         @media (max-width: 767px) {
           .menu-title {
-            font-size: clamp(24px, 7vw, 32px) !important;
+            font-size: clamp(28px, 8vw, 36px) !important;
             top: 30px !important;
           }
           .masonry-content {

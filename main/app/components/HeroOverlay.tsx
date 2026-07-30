@@ -18,7 +18,7 @@ const INTERIOR3_FADE_END = 1440;
 
 export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato, onOpenDrinks }: { onOpenMenu?: () => void; onOpenLocations?: () => void; onOpenGelato?: () => void; onOpenDrinks?: () => void }) {
   const scrollToFrame = (frame: number) => {
-    const totalScroll = TOTAL_FRAMES * 12;
+    const totalScroll = TOTAL_FRAMES * 6;
     const vh = window.innerHeight;
     const target = (frame / TOTAL_FRAMES) * (totalScroll - vh);
     window.scrollTo({ top: target, behavior: 'smooth' });
@@ -572,47 +572,60 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
           nav {
             padding: 0 20px !important;
           }
+          nav > div {
+            gap: 12px !important;
+          }
           .hero-nav-link {
-            display: none !important;
+            font-size: 11px !important;
+            padding: 6px 10px !important;
           }
           .hero-order-btn {
-            padding: 11px 20px !important;
-            font-size: 13px !important;
+            padding: 9px 16px !important;
+            font-size: 12px !important;
           }
           .hero-copy {
-            left: 20px !important;
-            right: 20px !important;
-            padding-bottom: 80px !important;
+            left: 50% !important;
+            right: auto !important;
+            width: calc(100vw - 48px) !important;
+            max-width: 440px !important;
             padding-top: 160px !important;
+            padding-bottom: 80px !important;
+            transform: translateX(-50%) !important;
+          }
+          .hero-headline {
+            max-width: 100% !important;
           }
           .hero-headline-word {
-            font-size: clamp(28px, 7vw, 42px) !important;
+            font-size: clamp(32px, 9vw, 48px) !important;
             white-space: normal !important;
           }
           .hero-subheading-text {
-            font-size: 16px !important;
-            max-width: 320px !important;
+            font-size: 17px !important;
+            max-width: 380px !important;
           }
           .hero-cta-btn {
-            padding: 14px 24px !important;
-            font-size: 14px !important;
+            padding: 16px 28px !important;
+            font-size: 15px !important;
           }
           .hero-vignette {
             height: 80px !important;
           }
           .interior-copy-content {
-            left: 20px !important;
-            right: 20px !important;
-            bottom: 40px !important;
+            left: 50% !important;
+            right: auto !important;
+            width: calc(100vw - 48px) !important;
+            max-width: 480px !important;
+            bottom: 48px !important;
             padding-bottom: env(safe-area-inset-bottom, 16px) !important;
+            transform: translateX(-50%) !important;
           }
           .interior-copy-content p {
-            font-size: 22px !important;
+            font-size: 24px !important;
           }
           .interior-cta-btn {
-            padding: 16px 32px !important;
-            font-size: 14px !important;
-            letter-spacing: 2px !important;
+            padding: 18px 36px !important;
+            font-size: 15px !important;
+            letter-spacing: 2.5px !important;
           }
         }
       `}</style>

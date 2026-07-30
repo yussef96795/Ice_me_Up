@@ -141,7 +141,7 @@ export default function LocationOverlay({ isOpen, onClose }: LocationOverlayProp
           animateOpacity
           delay={0.1}
         >
-          <div style={{ width: '100vw', height: isMobile ? '50vh' : '70vh', position: 'relative' }}>
+          <div style={{ width: '100vw', height: isMobile ? '55vh' : '70vh', position: 'relative' }}>
             <OptionWheel
               items={locations.map(l => l.name)}
               defaultSelected={2}

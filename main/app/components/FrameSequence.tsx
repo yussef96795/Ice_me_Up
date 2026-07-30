@@ -140,7 +140,7 @@ export default function FrameSequence() {
   }, []);
 
   return (
-    <div style={{ height: `${TOTAL_FRAMES * 12}px`, position: 'relative' }}>
+      <div style={{ height: `${TOTAL_FRAMES * 6}px`, position: 'relative' }}>
       <canvas
         ref={canvasRef}
         style={{
