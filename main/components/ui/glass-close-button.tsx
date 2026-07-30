@@ -6,14 +6,16 @@ interface GlassCloseButtonProps {
   onClick: () => void;
   variant?: 'close' | 'back';
   style?: React.CSSProperties;
+  className?: string;
 }
 
-export function GlassCloseButton({ onClick, variant = 'close', style }: GlassCloseButtonProps) {
+export function GlassCloseButton({ onClick, variant = 'close', style, className = '' }: GlassCloseButtonProps) {
   const Icon = variant === 'back' ? ArrowLeft : X;
 
   return (
     <button
       onClick={onClick}
+      className={className}
       aria-label={variant === 'back' ? 'Go back' : 'Close'}
       style={{
         position: 'absolute',

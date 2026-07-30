@@ -7,7 +7,7 @@ const CRITICAL_BATCH = 30;
 const WINDOW = 15;
 const LOOKAHEAD = 5;
 const getPath = (i: number) =>
-  `/frames/frame_${String(i).padStart(4, '0')}.jpg`;
+  `/frames/webp/frame_${String(i).padStart(4, '0')}.webp`;
 
 function loadImage(path: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -29,13 +29,11 @@ export default function FrameSequence() {
     let ticking = false;
     let scrollReady = false;
 
-    // DPR = 1 — skip retina scaling, 4× fewer pixels to draw
     const W = window.innerWidth;
     const H = window.innerHeight;
     canvas.width = W;
     canvas.height = H;
 
-    // No alpha — browser skips transparency compositing
     const ctx = canvas.getContext('2d', { alpha: false })!;
 
     const images: (HTMLImageElement | null)[] = new Array(TOTAL_FRAMES).fill(null);
@@ -43,7 +41,7 @@ export default function FrameSequence() {
     function draw(idx: number) {
       if (idx === lastRendered) return;
       const img = images[idx];
-      if (!img?.complete) return;
+      if (!img?.complete || img.naturalWidth === 0) return;
       lastRendered = idx;
 
       const scale = Math.max(W / img.naturalWidth, H / img.naturalHeight);
@@ -52,11 +50,9 @@ export default function FrameSequence() {
       const x = (W - w) / 2;
       const y = (H - h) / 2;
 
-      // Integer coordinates — no sub-pixel anti-aliasing
       ctx.clearRect(0, 0, W, H);
       ctx.drawImage(img, Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
 
-      // Pre-decode next few frames in background
       for (let n = 1; n <= LOOKAHEAD; n++) {
         const next = images[idx + n];
         if (next && !next.complete) next.decode().catch(() => {});
@@ -67,24 +63,26 @@ export default function FrameSequence() {
       if (!scrollReady || ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        const total = document.documentElement.scrollHeight - H;
-        if (total > 0) {
-          const idx = Math.min(
-            Math.floor((window.scrollY / total) * TOTAL_FRAMES),
-            TOTAL_FRAMES - 1
-          );
-          if (idx !== currentFrame) {
-            currentFrame = idx;
-            draw(idx);
+        try {
+          const total = document.documentElement.scrollHeight - window.innerHeight;
+          if (total > 0) {
+            const idx = Math.min(
+              Math.floor((window.scrollY / total) * TOTAL_FRAMES),
+              TOTAL_FRAMES - 1
+            );
+            if (idx !== currentFrame) {
+              currentFrame = idx;
+              draw(idx);
+            }
           }
+        } finally {
+          ticking = false;
         }
-        ticking = false;
       });
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Phase 1 — load frame 0 only, draw immediately
     (async () => {
       try {
         const img = await loadImage(getPath(1));
@@ -93,7 +91,6 @@ export default function FrameSequence() {
         currentFrame = 0;
         draw(0);
 
-        // Phase 2 — load frames 1-59 (critical batch)
         for (let i = 1; i < CRITICAL_BATCH; i++) {
           if (disposed) return;
           try {
@@ -101,10 +98,8 @@ export default function FrameSequence() {
           } catch { /* skip */ }
         }
 
-        // Unlock scroll after critical frames are loaded
         scrollReady = true;
 
-        // Sync to restored scroll position immediately
         const total = document.documentElement.scrollHeight - H;
         if (total > 0 && window.scrollY > 0) {
           const idx = Math.min(
@@ -122,7 +117,6 @@ export default function FrameSequence() {
           }
         }
 
-        // Phase 3 — load remaining frames during idle time
         const loadRest = async () => {
           for (let i = CRITICAL_BATCH; i < TOTAL_FRAMES; i++) {
             if (disposed) return;

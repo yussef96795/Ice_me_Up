@@ -4,10 +4,10 @@ import React from 'react';
 import { CircularGallery, GalleryItem } from './ui/circular-gallery';
 
 const items: GalleryItem[] = [
-  { common: 'Ananas', binomial: 'Smoothie ananas, 14DT', photo: { url: '/smoothie/Annanas_smoothie_14dt.jpeg', text: 'smoothie ananas', pos: '50% 50%' } },
-  { common: 'Fraise Citron', binomial: 'Smoothie fraise citron, 14DT', photo: { url: '/smoothie/Fraise_citron_smoothie_14dt.jpeg', text: 'smoothie fraise citron', pos: '50% 50%' } },
-  { common: 'Kiwi Banane', binomial: 'Smoothie kiwi banane, 14DT', photo: { url: '/smoothie/Kiwi_banana_smoothie_14dt.jpeg', text: 'smoothie kiwi banane', pos: '50% 50%' } },
-  { common: 'Mangue', binomial: 'Smoothie mangue, 14DT', photo: { url: '/smoothie/Mango_smoothie_14dt.jpeg', text: 'smoothie mangue', pos: '50% 50%' } },
+  { common: 'Ananas', binomial: 'Smoothie ananas, 14DT', photo: { url: '/smoothie/Annanas_smoothie_14dt.webp', text: 'smoothie ananas', pos: '50% 50%' } },
+  { common: 'Fraise Citron', binomial: 'Smoothie fraise citron, 14DT', photo: { url: '/smoothie/Fraise_citron_smoothie_14dt.webp', text: 'smoothie fraise citron', pos: '50% 50%' } },
+  { common: 'Kiwi Banane', binomial: 'Smoothie kiwi banane, 14DT', photo: { url: '/smoothie/Kiwi_banana_smoothie_14dt.webp', text: 'smoothie kiwi banane', pos: '50% 50%' } },
+  { common: 'Mangue', binomial: 'Smoothie mangue, 14DT', photo: { url: '/smoothie/Mango_smoothie_14dt.webp', text: 'smoothie mangue', pos: '50% 50%' } },
 ];
 
 export default function SmoothieGallery() {

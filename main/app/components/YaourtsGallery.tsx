@@ -17,17 +17,17 @@ export default function YaourtsGallery({ toppings, basePrice }: YaourtsGalleryPr
     {
       common: 'Fruits Rouges',
       binomial: `${price}DT`,
-      photo: { url: '/yaourts%20glaces/fruits_rouges_1%20topping.jpeg', text: 'yaourt glacé fruits rouges', pos: '50% 50%' }
+      photo: { url: '/yaourts%20glaces/fruits_rouges_1%20topping.webp', text: 'yaourt glacé fruits rouges', pos: '50% 50%' }
     },
     {
       common: 'Pistache',
       binomial: `${price}DT`,
-      photo: { url: '/yaourts%20glaces/pistache_1topping.jpeg', text: 'yaourt glacé pistache', pos: '50% 50%' }
+      photo: { url: '/yaourts%20glaces/pistache_1topping.webp', text: 'yaourt glacé pistache', pos: '50% 50%' }
     },
     {
       common: 'Speculoos',
       binomial: `${price}DT`,
-      photo: { url: '/yaourts%20glaces/speculoos_1%20topping.jpeg', text: 'yaourt glacé speculoos', pos: '50% 50%' }
+      photo: { url: '/yaourts%20glaces/speculoos_1%20topping.webp', text: 'yaourt glacé speculoos', pos: '50% 50%' }
     }
   ];
 
@@ -35,12 +35,12 @@ export default function YaourtsGallery({ toppings, basePrice }: YaourtsGalleryPr
     {
       common: 'Dubaï',
       binomial: `${price}DT`,
-      photo: { url: '/yaourts%20glaces/dubai_2%20toppings.jpeg', text: 'yaourt glacé dubaï', pos: '50% 50%' }
+      photo: { url: '/yaourts%20glaces/dubai_2%20toppings.webp', text: 'yaourt glacé dubaï', pos: '50% 50%' }
     },
     {
       common: 'Fraise Pistache Kunefa',
       binomial: `${price}DT`,
-      photo: { url: '/yaourts%20glaces/frasie_pistache_kunefa_2%20toppings.jpeg', text: 'yaourt glacé fraise pistache kunefa', pos: '50% 50%' }
+      photo: { url: '/yaourts%20glaces/frasie_pistache_kunefa_2%20toppings.webp', text: 'yaourt glacé fraise pistache kunefa', pos: '50% 50%' }
     }
   ];
 
@@ -48,7 +48,7 @@ export default function YaourtsGallery({ toppings, basePrice }: YaourtsGalleryPr
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
         <TiltedCard
-          imageSrc="/yaourts%20glaces/classique_0toppings.jpeg"
+          imageSrc="/yaourts%20glaces/classique_0toppings.webp"
           altText="yaourt glacé classique"
           captionText=""
           containerHeight="400px"

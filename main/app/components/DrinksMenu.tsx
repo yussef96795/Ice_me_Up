@@ -104,7 +104,7 @@ export default function DrinksMenu({ isOpen, onClose }: DrinksMenuProps) {
       }}
     >
       <img
-        src="/gelato-interior.jpg"
+        src="/gelato-interior.webp"
         alt=""
         style={{
           position: 'absolute',
@@ -127,7 +127,7 @@ export default function DrinksMenu({ isOpen, onClose }: DrinksMenuProps) {
         }}
       />
 
-      <GlassCloseButton onClick={onClose} variant="close" />
+      <GlassCloseButton onClick={onClose} variant="close" className="drinks-close-btn" />
 
       {showBack && (
         <GlassCloseButton
@@ -136,12 +136,14 @@ export default function DrinksMenu({ isOpen, onClose }: DrinksMenuProps) {
             else setView('masonry');
           }}
           variant="back"
+          className="drinks-back-btn"
         />
       )}
 
       <div style={{ position: 'absolute', top: 45, left: 0, right: 0, textAlign: 'center', zIndex: 10 }}>
         <span
           key={view + teaType}
+          className="menu-title"
           style={{
             fontFamily: 'var(--font-cinzel)',
             fontStyle: 'italic',
@@ -165,7 +167,7 @@ export default function DrinksMenu({ isOpen, onClose }: DrinksMenuProps) {
           zIndex: 10,
           overflowY: view !== 'masonry' ? 'hidden' : 'auto',
           overflowX: 'hidden',
-          padding: view !== 'masonry' ? '0' : '0 40px 40px',
+          padding: 0,
           display: 'flex',
           justifyContent: 'center',
           scrollbarWidth: 'none',
@@ -184,7 +186,41 @@ export default function DrinksMenu({ isOpen, onClose }: DrinksMenuProps) {
         view === 'iced-coffee' ? <IcedCoffeeGallery /> :
         view === 'cafes' ? <CafesGallery /> :
         view === 'tea' ? <TeaGallery type={teaType} /> :
-        view === 'hot-iced-tea' ? (
+        view === 'masonry' ? (
+          <div className="masonry-content" style={{ width: '100%', height: '100%' }}>
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                padding: '0 40px 40px',
+                display: 'flex',
+                justifyContent: 'center',
+                scrollbarWidth: 'none',
+              }}
+            >
+              <DrinksMasonry onItemClick={(item: MasonryItem) => {
+                switch (item.title) {
+                  case 'Hot/Iced Tea': setView('hot-iced-tea'); break;
+                  case 'Milkshake': setView('milkshake'); break;
+                  case 'Smoothie': setView('smoothie'); break;
+                  case 'Boissons': setView('boissons'); break;
+                  case 'Jus': setView('jus'); break;
+                  case 'Boissons Chaudes': setView('boissons-chaudes'); break;
+                  case 'Mojito': setView('mojito'); break;
+                  case 'Matcha': setView('matcha'); break;
+                  case 'Macchiato': setView('macchiato'); break;
+                  case 'Frappuccino': setView('frappuccino'); break;
+                  case 'Affogato': setView('affogato'); break;
+                  case 'Iced Coffee': setView('iced-coffee'); break;
+                  case 'Cafés': setView('cafes'); break;
+                  default: setView('masonry');
+                }
+              }} />
+            </div>
+          </div>
+        ) : view === 'hot-iced-tea' ? (
           <FlowingMenu
             items={hotIcedItems}
             textColor="#ffffff"
@@ -197,45 +233,36 @@ export default function DrinksMenu({ isOpen, onClose }: DrinksMenuProps) {
               setView('tea');
             }}
           />
-        ) : (
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              overflowY: 'auto',
-              overflowX: 'hidden',
-              padding: '0 40px 40px',
-              display: 'flex',
-              justifyContent: 'center',
-              scrollbarWidth: 'none',
-            }}
-          >
-            <DrinksMasonry onItemClick={(item: MasonryItem) => {
-              switch (item.title) {
-                case 'Hot/Iced Tea': setView('hot-iced-tea'); break;
-                case 'Milkshake': setView('milkshake'); break;
-                case 'Smoothie': setView('smoothie'); break;
-                case 'Boissons': setView('boissons'); break;
-                case 'Jus': setView('jus'); break;
-                case 'Boissons Chaudes': setView('boissons-chaudes'); break;
-                case 'Mojito': setView('mojito'); break;
-                case 'Matcha': setView('matcha'); break;
-                case 'Macchiato': setView('macchiato'); break;
-                case 'Frappuccino': setView('frappuccino'); break;
-                case 'Affogato': setView('affogato'); break;
-                case 'Iced Coffee': setView('iced-coffee'); break;
-                case 'Cafés': setView('cafes'); break;
-                default: setView('masonry');
-              }
-            }} />
-          </div>
-        )}
+        ) : null}
       </div>
 
       <style>{`
         @keyframes drinksMenuIn {
           from { opacity: 0; transform: scale(0.97); }
           to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 767px) {
+          .menu-title {
+            font-size: clamp(24px, 7vw, 32px) !important;
+            top: 30px !important;
+          }
+          .masonry-content {
+            width: 100%;
+            height: 100%;
+            padding: 0 12px 40px;
+          }
+          .masonry-content > div {
+            padding: 0 12px 40px !important;
+          }
+          .drinks-close-btn {
+            top: 16px !important;
+            right: 16px !important;
+          }
+          .drinks-back-btn {
+            top: 16px !important;
+            left: 16px !important;
+          }
         }
       `}</style>
     </div>

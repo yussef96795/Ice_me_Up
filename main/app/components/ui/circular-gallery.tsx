@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, HTMLAttributes } from 'react';
+import Image from 'next/image';
 
 const cn = (...classes: (string | undefined | null | false)[]) => {
   return classes.filter(Boolean).join(' ');
@@ -23,6 +24,10 @@ interface CircularGalleryProps extends HTMLAttributes<HTMLDivElement> {
   autoRotateSpeed?: number;
 }
 
+const cardWidth = (isMobile: boolean) => isMobile ? 160 : 300;
+const cardHeight = (isMobile: boolean) => isMobile ? 220 : 400;
+const perspective = (isMobile: boolean) => isMobile ? 1000 : 2000;
+
 const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
   ({ items, className, radius = 600, autoRotateSpeed = 0.02, ...props }, ref) => {
     const [rotation, setRotation] = useState(0);
@@ -30,6 +35,17 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
     const [isDragging, setIsDragging] = useState(false);
     const isDraggingRef = useRef(false);
     const lastDragXRef = useRef(0);
+    const [isMobile, setIsMobile] = useState(
+      typeof window !== 'undefined' ? window.innerWidth <= 767 : false
+    );
+
+    useEffect(() => {
+      const mq = window.matchMedia('(max-width: 767px)');
+      setIsMobile(mq.matches);
+      const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+      mq.addEventListener('change', handler);
+      return () => mq.removeEventListener('change', handler);
+    }, []);
 
     useEffect(() => {
       if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -72,6 +88,9 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
     };
 
     const anglePerItem = 360 / items.length;
+    const cw = cardWidth(isMobile);
+    const ch = cardHeight(isMobile);
+    const effRadius = isMobile ? Math.min(radius, 260) : radius;
 
     return (
       <div
@@ -79,7 +98,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
         role="region"
         aria-label="Circular 3D Gallery"
         className={cn("relative w-full h-full flex items-center justify-center select-none", className)}
-        style={{ perspective: '2000px', cursor: isDragging ? 'grabbing' : 'grab', touchAction: 'none' }}
+        style={{ perspective: `${perspective(isMobile)}px`, cursor: isDragging ? 'grabbing' : 'grab', touchAction: 'none' }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -104,28 +123,31 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                 key={i}
                 role="group"
                 aria-label={item.common}
-                className="absolute w-[300px] h-[400px]"
+                className="absolute"
                 style={{
-                  transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
+                  width: cw,
+                  height: ch,
+                  transform: `rotateY(${itemAngle}deg) translateZ(${effRadius}px)`,
                   left: '50%',
                   top: '50%',
-                  marginLeft: '-150px',
-                  marginTop: '-200px',
+                  marginLeft: -cw / 2,
+                  marginTop: -ch / 2,
                   opacity: opacity,
                   transition: 'opacity 0.3s linear'
                 }}
               >
                 <div className="relative w-full h-full rounded-lg shadow-2xl overflow-hidden border border-white/20 backdrop-blur-lg bg-white/10">
-                  <img
+                  <Image
                     src={item.photo.url}
                     alt={item.photo.text}
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                     style={{ objectPosition: item.photo.pos || 'center' }}
+                    sizes={isMobile ? '160px' : '300px'}
                   />
-                  <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
-                    <h2 className="text-xl font-bold">{item.common}</h2>
-                    <em className="text-sm italic opacity-80">{item.binomial}</em>
+                  <div className="absolute bottom-0 left-0 w-full p-2 sm:p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+                    <h2 className="text-sm sm:text-xl font-bold leading-tight">{item.common}</h2>
+                    <em className="text-[10px] sm:text-sm italic opacity-80">{item.binomial}</em>
                   </div>
                 </div>
               </div>

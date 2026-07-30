@@ -8,7 +8,7 @@ const croqueItems: GalleryItem[] = [
     common: 'Croque Monsieur Jambon Fromage',
     binomial: 'Jambon, fromage, 15DT',
     photo: {
-      url: '/croque/croque-monsieur_jambon_fromage_15dt.jpeg',
+      url: '/croque/croque-monsieur_jambon_fromage_15dt.webp',
       text: 'croque monsieur jambon fromage',
       pos: '50% 50%'
     }
@@ -17,7 +17,7 @@ const croqueItems: GalleryItem[] = [
     common: 'Croque Monsieur Thon Fromage',
     binomial: 'Thon, fromage, 15DT',
     photo: {
-      url: '/croque/croque-monsieur_Thon_fromage_15dt.jpeg',
+      url: '/croque/croque-monsieur_Thon_fromage_15dt.webp',
       text: 'croque monsieur thon fromage',
       pos: '50% 50%'
     }

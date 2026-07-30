@@ -34,6 +34,17 @@ interface LocationOverlayProps {
 
 export default function LocationOverlay({ isOpen, onClose }: LocationOverlayProps) {
   const [selectedIdx, setSelectedIdx] = useState(0);
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.innerWidth <= 767 : false
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -67,7 +78,7 @@ export default function LocationOverlay({ isOpen, onClose }: LocationOverlayProp
     >
       {/* Background image — always frame_0001, never changes */}
       <img
-        src="/frames/frame_0001.jpg"
+        src="/frames/webp/frame_0001.webp"
         alt=""
         style={{
           position: 'absolute',
@@ -93,15 +104,15 @@ export default function LocationOverlay({ isOpen, onClose }: LocationOverlayProp
       />
 
       {/* Close button */}
-      <GlassCloseButton onClick={onClose} variant="close" />
+      <GlassCloseButton onClick={onClose} variant="close" className="location-close-btn" />
 
       {/* Title */}
-      <div style={{ position: 'absolute', top: 45, left: 0, right: 0, textAlign: 'center', zIndex: 10 }}>
+      <div style={{ position: 'absolute', top: isMobile ? 28 : 45, left: 0, right: 0, textAlign: 'center', zIndex: 10, paddingTop: 'env(safe-area-inset-top, 0px)' }}>
         <span
           style={{
             fontFamily: 'var(--font-display)',
             fontStyle: 'italic',
-            fontSize: 40,
+            fontSize: isMobile ? 28 : 40,
             color: '#ffffff',
             fontWeight: 400,
           }}
@@ -130,7 +141,7 @@ export default function LocationOverlay({ isOpen, onClose }: LocationOverlayProp
           animateOpacity
           delay={0.1}
         >
-          <div style={{ width: '100vw', height: '70vh', position: 'relative' }}>
+          <div style={{ width: '100vw', height: isMobile ? '50vh' : '70vh', position: 'relative' }}>
             <OptionWheel
               items={locations.map(l => l.name)}
               defaultSelected={2}
@@ -138,15 +149,15 @@ export default function LocationOverlay({ isOpen, onClose }: LocationOverlayProp
               textColor="#555555"
               activeColor="#ffffff"
               side="center"
-              fontSize={3.5}
-              spacing={1.5}
+              fontSize={isMobile ? 2.2 : 3.5}
+              spacing={isMobile ? 1.2 : 1.5}
               curve={0}
               tilt={0}
               blur={2.5}
               fade={0.4}
               minOpacity={0.08}
               smoothing={200}
-              inset={0}
+              inset={isMobile ? 20 : 0}
               loop={false}
               draggable
               itemLinks={locations.map(l => l.mapUrl)}
@@ -161,6 +172,12 @@ export default function LocationOverlay({ isOpen, onClose }: LocationOverlayProp
           to { opacity: 1; transform: scale(1); }
         }
 
+        @media (max-width: 767px) {
+          .location-close-btn {
+            top: 16px !important;
+            right: 16px !important;
+          }
+        }
       `}</style>
     </div>
   );

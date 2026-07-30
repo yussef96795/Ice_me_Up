@@ -69,7 +69,7 @@ export default function PastryMenu({ isOpen, onClose }: PastryMenuProps) {
     >
       {/* Background image */}
       <img
-        src="/gelato-interior.jpg"
+        src="/gelato-interior.webp"
         alt=""
         style={{
           position: 'absolute',
@@ -94,17 +94,18 @@ export default function PastryMenu({ isOpen, onClose }: PastryMenuProps) {
       />
 
       {/* Close button */}
-      <GlassCloseButton onClick={onClose} variant="close" />
+      <GlassCloseButton onClick={onClose} variant="close" className="pastry-close-btn" />
 
       {/* Back arrow (gallery only) */}
       {view !== 'masonry' && (
-        <GlassCloseButton onClick={() => setView('masonry')} variant="back" />
+        <GlassCloseButton onClick={() => setView('masonry')} variant="back" className="pastry-back-btn" />
       )}
 
       {/* Title */}
       <div style={{ position: 'absolute', top: 45, left: 0, right: 0, textAlign: 'center', zIndex: 10 }}>
         <span
           key={view}
+          className="menu-title"
           style={{
             fontFamily: 'var(--font-cinzel)',
             fontStyle: 'italic',
@@ -129,7 +130,7 @@ export default function PastryMenu({ isOpen, onClose }: PastryMenuProps) {
           zIndex: 10,
           overflowY: view !== 'masonry' ? 'hidden' : 'auto',
           overflowX: 'hidden',
-          padding: view !== 'masonry' ? '0' : '0 40px 40px',
+          padding: 0,
           display: 'flex',
           justifyContent: 'center',
           scrollbarWidth: 'none',
@@ -152,6 +153,7 @@ export default function PastryMenu({ isOpen, onClose }: PastryMenuProps) {
         ) : view === 'croque' ? (
           <CroqueGallery />
         ) : (
+          <div className="masonry-content">
           <PastryMasonry onItemClick={(item) => {
             if (item.title === 'Crêpes Salées') setView('crepe-salee');
             else if (item.title === 'Crêpes Sucrées') setView('crepe-sucree');
@@ -162,6 +164,7 @@ export default function PastryMenu({ isOpen, onClose }: PastryMenuProps) {
             else if (item.title === 'Croques-Monsieur') setView('croque');
             else setView('gallery');
           }} />
+          </div>
         )}
       </div>
 
@@ -169,6 +172,26 @@ export default function PastryMenu({ isOpen, onClose }: PastryMenuProps) {
         @keyframes pastryMenuIn {
           from { opacity: 0; transform: scale(0.97); }
           to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 767px) {
+          .menu-title {
+            font-size: clamp(24px, 7vw, 32px) !important;
+            top: 30px !important;
+          }
+          .masonry-content {
+            width: 100%;
+            height: 100%;
+            padding: 0 12px 40px;
+          }
+          .pastry-close-btn {
+            top: 16px !important;
+            right: 16px !important;
+          }
+          .pastry-back-btn {
+            top: 16px !important;
+            left: 16px !important;
+          }
         }
       `}</style>
     </div>

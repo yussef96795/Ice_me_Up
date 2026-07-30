@@ -1,12 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useMemo } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import './ScrollReveal.css';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const ScrollReveal = ({
   children,
@@ -58,58 +54,29 @@ const ScrollReveal = ({
     const el = containerRef.current;
     if (!el) return;
 
-    const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window;
-    const targets = splitWords ? el.querySelectorAll('.word') : el;
-    const tweens: gsap.core.Tween[] = [];
+    const tweens: Array<{ scrollTrigger?: { kill: () => void }; kill: () => void }> = [];
+    let disposed = false;
 
-    if (reverse) {
-      tweens.push(
-        gsap.fromTo(
-          targets,
-          { opacity: 1, willChange: 'opacity' },
-          {
-            ease: 'none',
-            opacity: baseOpacity,
-            stagger: splitWords ? 0.05 : 0,
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: el,
-              scroller,
-              start: 'top top',
-              end: `+=${scrollDistance}`,
-              scrub: true,
-            },
-          }
-        )
-      );
+    (async () => {
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
+      gsap.registerPlugin(ScrollTrigger);
 
-      tweens.push(
-        gsap.fromTo(
-          el,
-          { transformOrigin: '0% 50%', rotate: 0 },
-          {
-            ease: 'none',
-            rotate: baseRotation,
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: el,
-              scroller,
-              start: 'top top',
-              end: `+=${scrollDistance}`,
-              scrub: true,
-            },
-          }
-        )
-      );
+      if (disposed) return;
 
-      if (enableBlur) {
+      const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window;
+      const targets = splitWords ? el.querySelectorAll('.word') : el;
+
+      if (reverse) {
         tweens.push(
           gsap.fromTo(
             targets,
-            { filter: 'blur(0px)' },
+            { opacity: 1, willChange: 'opacity' },
             {
               ease: 'none',
-              filter: `blur(${blurStrength}px)`,
+              opacity: baseOpacity,
               stagger: splitWords ? 0.05 : 0,
               immediateRender: false,
               scrollTrigger: {
@@ -122,55 +89,74 @@ const ScrollReveal = ({
             }
           )
         );
-      }
-    } else {
-      tweens.push(
-        gsap.fromTo(
-          el,
-          { transformOrigin: '0% 50%', rotate: baseRotation },
-          {
-            ease: 'none',
-            rotate: 0,
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: el,
-              scroller,
-              start: 'top bottom',
-              end: rotationEnd,
-              scrub: true,
-            },
-          }
-        )
-      );
 
-      tweens.push(
-        gsap.fromTo(
-          targets,
-          { opacity: baseOpacity, willChange: 'opacity' },
-          {
-            ease: 'none',
-            opacity: 1,
-            stagger: splitWords ? 0.05 : 0,
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: el,
-              scroller,
-              start: 'top bottom-=20%',
-              end: wordAnimationEnd,
-              scrub: true,
-            },
-          }
-        )
-      );
+        tweens.push(
+          gsap.fromTo(
+            el,
+            { transformOrigin: '0% 50%', rotate: 0 },
+            {
+              ease: 'none',
+              rotate: baseRotation,
+              immediateRender: false,
+              scrollTrigger: {
+                trigger: el,
+                scroller,
+                start: 'top top',
+                end: `+=${scrollDistance}`,
+                scrub: true,
+              },
+            }
+          )
+        );
 
-      if (enableBlur) {
+        if (enableBlur) {
+          tweens.push(
+            gsap.fromTo(
+              targets,
+              { filter: 'blur(0px)' },
+              {
+                ease: 'none',
+                filter: `blur(${blurStrength}px)`,
+                stagger: splitWords ? 0.05 : 0,
+                immediateRender: false,
+                scrollTrigger: {
+                  trigger: el,
+                  scroller,
+                  start: 'top top',
+                  end: `+=${scrollDistance}`,
+                  scrub: true,
+                },
+              }
+            )
+          );
+        }
+      } else {
+        tweens.push(
+          gsap.fromTo(
+            el,
+            { transformOrigin: '0% 50%', rotate: baseRotation },
+            {
+              ease: 'none',
+              rotate: 0,
+              immediateRender: false,
+              scrollTrigger: {
+                trigger: el,
+                scroller,
+                start: 'top bottom',
+                end: rotationEnd,
+                scrub: true,
+              },
+            }
+          )
+        );
+
         tweens.push(
           gsap.fromTo(
             targets,
-            { filter: `blur(${blurStrength}px)` },
+            { opacity: baseOpacity, willChange: 'opacity' },
             {
               ease: 'none',
-              filter: 'blur(0px)',
+              opacity: 1,
               stagger: splitWords ? 0.05 : 0,
               immediateRender: false,
               scrollTrigger: {
@@ -183,10 +169,33 @@ const ScrollReveal = ({
             }
           )
         );
+
+        if (enableBlur) {
+          tweens.push(
+            gsap.fromTo(
+              targets,
+              { filter: `blur(${blurStrength}px)` },
+              {
+                ease: 'none',
+                filter: 'blur(0px)',
+                stagger: splitWords ? 0.05 : 0,
+                immediateRender: false,
+                scrollTrigger: {
+                  trigger: el,
+                  scroller,
+                  start: 'top bottom-=20%',
+                  end: wordAnimationEnd,
+                  scrub: true,
+                },
+              }
+            )
+          );
+        }
       }
-    }
+    })();
 
     return () => {
+      disposed = true;
       tweens.forEach(t => {
         if (t.scrollTrigger) t.scrollTrigger.kill();
         t.kill();

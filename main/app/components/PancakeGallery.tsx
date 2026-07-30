@@ -8,7 +8,7 @@ const pancakeItems: GalleryItem[] = [
     common: 'Pancake Nutella',
     binomial: 'Nutella, 15DT',
     photo: {
-      url: '/pancake/pancake_nutella_15dt.jpeg',
+      url: '/pancake/pancake_nutella_15dt.webp',
       text: 'pancake nutella',
       pos: '50% 50%'
     }
@@ -17,7 +17,7 @@ const pancakeItems: GalleryItem[] = [
     common: 'Pancake Pistache',
     binomial: 'Pistache, 19DT',
     photo: {
-      url: '/pancake/pancake_pistacchio_19dt.jpeg',
+      url: '/pancake/pancake_pistacchio_19dt.webp',
       text: 'pancake pistache',
       pos: '50% 50%'
     }
@@ -26,7 +26,7 @@ const pancakeItems: GalleryItem[] = [
     common: 'Pancake Fruits Rouges',
     binomial: 'Fruits rouges, 20DT',
     photo: {
-      url: '/pancake/pancake_fruits_rouges_20dt.jpeg',
+      url: '/pancake/pancake_fruits_rouges_20dt.webp',
       text: 'pancake fruits rouges',
       pos: '50% 50%'
     }

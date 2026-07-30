@@ -8,7 +8,7 @@ const gauffreItems: GalleryItem[] = [
     common: 'Gauffre Nutella',
     binomial: 'Nutella, 15DT',
     photo: {
-      url: '/gauffre/gauffre_nutella_15dt.jpeg',
+      url: '/gauffre/gauffre_nutella_15dt.webp',
       text: 'gauffre nutella',
       pos: '50% 50%'
     }
@@ -17,7 +17,7 @@ const gauffreItems: GalleryItem[] = [
     common: 'Gauffre Pistache',
     binomial: 'Pistache, 19DT',
     photo: {
-      url: '/gauffre/gauffre_pistache_19dt.jpeg',
+      url: '/gauffre/gauffre_pistache_19dt.webp',
       text: 'gauffre pistache',
       pos: '50% 50%'
     }
@@ -26,7 +26,7 @@ const gauffreItems: GalleryItem[] = [
     common: 'Gauffre Dubai',
     binomial: 'Dubai chocolate, 20DT',
     photo: {
-      url: '/gauffre/gauffre_dubai_20dt.jpeg',
+      url: '/gauffre/gauffre_dubai_20dt.webp',
       text: 'gauffre dubai',
       pos: '50% 50%'
     }

@@ -8,7 +8,7 @@ const crepeSucreeItems: GalleryItem[] = [
     common: 'Crêpe Spéculoos',
     binomial: 'Spéculoos, 15DT',
     photo: {
-      url: '/crepe%20sucree/crepe_speculoos_15dt.jpeg',
+      url: '/crepe%20sucree/crepe_speculoos_15dt.webp',
       text: 'crêpe spéculoos',
       pos: '50% 50%'
     }
@@ -17,7 +17,7 @@ const crepeSucreeItems: GalleryItem[] = [
     common: 'Crêpe Pistache',
     binomial: 'Pistache, 19DT',
     photo: {
-      url: '/crepe%20sucree/crepe_pistache_19dt.jpeg',
+      url: '/crepe%20sucree/crepe_pistache_19dt.webp',
       text: 'crêpe pistache',
       pos: '50% 50%'
     }
@@ -26,7 +26,7 @@ const crepeSucreeItems: GalleryItem[] = [
     common: 'Crêpe Nutella',
     binomial: 'Nutella, 15DT',
     photo: {
-      url: '/crepe%20sucree/crepe_nutella_15dt.jpeg',
+      url: '/crepe%20sucree/crepe_nutella_15dt.webp',
       text: 'crêpe nutella',
       pos: '50% 50%'
     }
@@ -35,7 +35,7 @@ const crepeSucreeItems: GalleryItem[] = [
     common: 'Crêpe Dubai',
     binomial: 'Dubai chocolate, 20DT',
     photo: {
-      url: '/crepe%20sucree/crepe_dubai_20dt.jpeg',
+      url: '/crepe%20sucree/crepe_dubai_20dt.webp',
       text: 'crêpe dubai chocolate',
       pos: '50% 50%'
     }

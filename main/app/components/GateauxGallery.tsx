@@ -8,7 +8,7 @@ const gateauxItems: GalleryItem[] = [
     common: 'Tiramisu Classique',
     binomial: 'Mascarpone, café, 18DT',
     photo: {
-      url: '/gateaux/Tiramisu_classique_18dt.jpeg',
+      url: '/gateaux/Tiramisu_classique_18dt.webp',
       text: 'tiramisu classique',
       pos: '50% 50%'
     }
@@ -17,7 +17,7 @@ const gateauxItems: GalleryItem[] = [
     common: 'Tiramisu Pistache',
     binomial: 'Pistache, mascarpone, 22DT',
     photo: {
-      url: '/gateaux/Tiramisu_pistache_22dt.jpeg',
+      url: '/gateaux/Tiramisu_pistache_22dt.webp',
       text: 'tiramisu pistache',
       pos: '50% 50%'
     }
@@ -26,7 +26,7 @@ const gateauxItems: GalleryItem[] = [
     common: 'Dubai Cake',
     binomial: 'Pistache, crème de sésame, 28DT',
     photo: {
-      url: '/gateaux/Dubai_Cake_28dt.jpeg',
+      url: '/gateaux/Dubai_Cake_28dt.webp',
       text: 'dubai cake',
       pos: '50% 50%'
     }
@@ -35,7 +35,7 @@ const gateauxItems: GalleryItem[] = [
     common: 'Mousse au Chocolat',
     binomial: 'Chocolat noir, 18DT',
     photo: {
-      url: '/gateaux/Chocolate_mousse_18dt.jpeg',
+      url: '/gateaux/Chocolate_mousse_18dt.webp',
       text: 'mousse au chocolat',
       pos: '50% 50%'
     }

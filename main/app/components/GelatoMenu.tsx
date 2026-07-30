@@ -124,7 +124,7 @@ export default function GelatoMenu({ isOpen, onClose }: GelatoMenuProps) {
     >
       {/* Background image */}
       <img
-        src="/gelato-interior.jpg"
+        src="/gelato-interior.webp"
         alt=""
         style={{
           position: 'absolute',
@@ -149,7 +149,7 @@ export default function GelatoMenu({ isOpen, onClose }: GelatoMenuProps) {
       />
 
       {/* Close button */}
-      <GlassCloseButton onClick={onClose} variant="close" />
+      <GlassCloseButton onClick={onClose} variant="close" className="gelato-close-btn" />
 
       {/* Back arrow (sub-menu only) */}
       {showBack && (
@@ -160,6 +160,7 @@ export default function GelatoMenu({ isOpen, onClose }: GelatoMenuProps) {
             else setActiveSubMenu(null);
           }}
           variant="back"
+          className="gelato-back-btn"
         />
       )}
 
@@ -167,6 +168,7 @@ export default function GelatoMenu({ isOpen, onClose }: GelatoMenuProps) {
       <div style={{ position: 'absolute', top: 45, left: 0, right: 0, textAlign: 'center', zIndex: 10 }}>
         <span
           key={currentTitle}
+          className="menu-title"
           style={{
             fontFamily: 'var(--font-cinzel)',
             fontStyle: 'italic',
@@ -182,6 +184,7 @@ export default function GelatoMenu({ isOpen, onClose }: GelatoMenuProps) {
 
       {/* FlowingMenu */}
       <div
+        className="menu-content"
         style={{
           position: 'absolute',
           top: 120,
@@ -246,6 +249,23 @@ export default function GelatoMenu({ isOpen, onClose }: GelatoMenuProps) {
         @keyframes gelatoMenuIn {
           from { opacity: 0; transform: scale(0.97); }
           to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 767px) {
+          .menu-title {
+            font-size: clamp(24px, 7vw, 32px) !important;
+          }
+          .menu-content {
+            top: 100px !important;
+          }
+          .gelato-close-btn {
+            top: 16px !important;
+            right: 16px !important;
+          }
+          .gelato-back-btn {
+            top: 16px !important;
+            left: 16px !important;
+          }
         }
       `}</style>
     </div>

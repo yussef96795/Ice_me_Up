@@ -8,7 +8,7 @@ const paniniItems: GalleryItem[] = [
     common: 'Panini Jambon Fromage',
     binomial: 'Jambon, fromage, 15DT',
     photo: {
-      url: '/panini/Panini_Jambon_fromage_15dt.jpeg',
+      url: '/panini/Panini_Jambon_fromage_15dt.webp',
       text: 'panini jambon fromage',
       pos: '50% 50%'
     }
@@ -17,7 +17,7 @@ const paniniItems: GalleryItem[] = [
     common: 'Panini Thon Fromage',
     binomial: 'Thon, fromage, 15DT',
     photo: {
-      url: '/panini/Panini_Thon_fromage_15dt.jpeg',
+      url: '/panini/Panini_Thon_fromage_15dt.webp',
       text: 'panini thon fromage',
       pos: '50% 50%'
     }

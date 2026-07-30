@@ -1,15 +1,10 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { DM_Serif_Display, DM_Sans } from 'next/font/google';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrollReveal from './ScrollReveal';
 
 import { LiquidGlassButton } from '@/components/ui/liquid-glass-button';
 import { lerp } from './lerp';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const TOTAL_FRAMES = 1440;
 const INTERIOR_FADE_START = 396;
@@ -20,18 +15,6 @@ const INTERIOR2_FADE_END = 996;
 const INTERIOR2_DISAPPEAR = 1020;
 const INTERIOR3_FADE_START = 1360;
 const INTERIOR3_FADE_END = 1440;
-
-const dmSerif = DM_Serif_Display({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-display',
-});
-
-const dmSans = DM_Sans({
-  weight: ['400', '500', '600'],
-  subsets: ['latin'],
-  variable: '--font-dm-sans',
-});
 
 export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato, onOpenDrinks }: { onOpenMenu?: () => void; onOpenLocations?: () => void; onOpenGelato?: () => void; onOpenDrinks?: () => void }) {
   const scrollToFrame = (frame: number) => {
@@ -71,23 +54,27 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
       }
     };
 
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    const initProgress = total > 0 ? window.scrollY / total : 0;
-    applyFrame(Math.floor(initProgress * TOTAL_FRAMES));
+    const HEADLINE_FADE_DISTANCE = 500;
+    const heroHeadline = document.querySelector<HTMLElement>('[data-hero-headline]');
 
-    const st = ScrollTrigger.create({
-      trigger: document.body,
-      start: 'top top',
-      end: 'bottom bottom',
-      onUpdate: (self) => {
-        applyFrame(Math.floor(self.progress * TOTAL_FRAMES));
-      },
-    });
+    const onScroll = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      if (total <= 0) return;
+      const progress = Math.min(window.scrollY / total, 1);
+      const frame = Math.floor(progress * TOTAL_FRAMES);
+      applyFrame(frame);
 
-    ScrollTrigger.refresh();
+      if (heroHeadline) {
+        const headOpacity = Math.max(0.01, 1 - window.scrollY / HEADLINE_FADE_DISTANCE);
+        heroHeadline.style.opacity = String(headOpacity);
+      }
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     return () => {
-      st.kill();
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
@@ -99,10 +86,10 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
         zIndex: 10,
         pointerEvents: 'none',
       }}
-      className={`${dmSerif.variable} ${dmSans.variable}`}
     >
       {/* Top vignette */}
       <div
+        className="hero-vignette"
         style={{
           position: 'absolute',
           top: 0,
@@ -252,45 +239,33 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
         }}
         className="hero-copy"
       >
-        <ScrollReveal
-          reverse
-          splitWords={false}
-          scrollDistance={400}
-          enableBlur={false}
-          baseOpacity={0}
-          baseRotation={0}
-          containerClassName="hero-eyebrow"
-          textClassName="hero-eyebrow-text"
+        <div
+          className="hero-headline"
+          data-hero-headline
+          style={{
+            maxWidth: 520,
+          }}
         >
-          HANDCRAFTED · SMALL BATCH
-        </ScrollReveal>
-
-        <div className="hero-headline">
-          <ScrollReveal
-            as="div"
-            reverse
-            scrollDistance={500}
-            enableBlur={false}
-            baseOpacity={0}
-            baseRotation={1}
-            containerClassName="hero-headline-line"
-            textClassName="hero-headline-word"
-          >
+          <h1 className="hero-headline-line hero-headline-word">
             Scoops that make
-          </ScrollReveal>
-          <ScrollReveal
-            as="div"
-            reverse
-            scrollDistance={500}
-            enableBlur={false}
-            baseOpacity={0}
-            baseRotation={1}
-            containerClassName="hero-headline-line hero-headline-italic"
-            textClassName="hero-headline-word"
-          >
+          </h1>
+          <h1 className="hero-headline-line hero-headline-italic hero-headline-word">
             every day sweeter
-          </ScrollReveal>
+          </h1>
         </div>
+
+          <ScrollReveal
+            reverse
+            splitWords={false}
+            scrollDistance={400}
+            enableBlur={false}
+            baseOpacity={0.01}
+            baseRotation={0}
+            containerClassName="hero-eyebrow"
+            textClassName="hero-eyebrow-text"
+          >
+            HANDCRAFTED · SMALL BATCH
+          </ScrollReveal>
 
         <ScrollReveal
           reverse
@@ -381,6 +356,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
 
           <LiquidGlassButton
             as="button"
+            className="interior-cta-btn"
             tintColor="rgba(180, 160, 220, 0.25)"
             onClick={onOpenGelato}
             style={{
@@ -449,6 +425,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
 
           <LiquidGlassButton
             as="button"
+            className="interior-cta-btn"
             tintColor="rgba(255, 247, 0, 0.25)"
             onClick={onOpenMenu}
             style={{
@@ -517,6 +494,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
 
           <LiquidGlassButton
             as="button"
+            className="interior-cta-btn"
             tintColor="rgba(255, 182, 193, 0.25)"
             onClick={onOpenDrinks}
             style={{
@@ -567,7 +545,6 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
           color: var(--color-text-primary);
           line-height: 1.08;
           letter-spacing: -1px;
-          white-space: nowrap;
           text-shadow: var(--shadow-text-strong);
         }
         .hero-headline-italic .hero-headline-word {
@@ -575,7 +552,7 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
         }
 
         .hero-subheading {
-          margin: 0 0 36px 0;
+          margin: 0 0 24px 0;
         }
         .hero-subheading-text {
           font-family: var(--font-body);
@@ -598,21 +575,44 @@ export default function HeroOverlay({ onOpenMenu, onOpenLocations, onOpenGelato,
           .hero-nav-link {
             display: none !important;
           }
+          .hero-order-btn {
+            padding: 11px 20px !important;
+            font-size: 13px !important;
+          }
           .hero-copy {
-            left: 24px !important;
+            left: 20px !important;
+            right: 20px !important;
             padding-bottom: 80px !important;
+            padding-top: 160px !important;
           }
           .hero-headline-word {
-            font-size: clamp(28px, 6vw, 42px) !important;
+            font-size: clamp(28px, 7vw, 42px) !important;
+            white-space: normal !important;
           }
           .hero-subheading-text {
             font-size: 16px !important;
             max-width: 320px !important;
           }
+          .hero-cta-btn {
+            padding: 14px 24px !important;
+            font-size: 14px !important;
+          }
+          .hero-vignette {
+            height: 80px !important;
+          }
           .interior-copy-content {
-            left: 24px !important;
-            right: 24px !important;
-            bottom: 60px !important;
+            left: 20px !important;
+            right: 20px !important;
+            bottom: 40px !important;
+            padding-bottom: env(safe-area-inset-bottom, 16px) !important;
+          }
+          .interior-copy-content p {
+            font-size: 22px !important;
+          }
+          .interior-cta-btn {
+            padding: 16px 32px !important;
+            font-size: 14px !important;
+            letter-spacing: 2px !important;
           }
         }
       `}</style>
