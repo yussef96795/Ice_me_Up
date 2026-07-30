@@ -2,3 +2,5 @@
 /.next
 /out
 /__deploy_tmp
+
+.vercel

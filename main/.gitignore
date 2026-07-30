@@ -48,3 +48,5 @@ next-env.d.ts
 showcase-preview.png
 lighthouse-report.json
 snapshot.txt
+
+.vercel
